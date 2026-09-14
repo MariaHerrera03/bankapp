@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://i.imgur.com/placeholder-logo.png" alt="BankApp" width="220" />
+  <img src="https://raw.githubusercontent.com/MariaHerrera03/bankapp/main/shared/assets/LogoBankApp.png" alt="BankApp" width="350" />
 </p>
 
 <h1 align="center">BankApp</h1>
@@ -18,6 +18,14 @@ contenedor nativo a traves de un bridge de eventos, simulando el flujo real de u
 bancaria construida con arquitectura hibrida.
 
 ## Demo
+
+<p align="center">
+  <img
+    src="https://raw.githubusercontent.com/MariaHerrera03/bankapp/main/shared/assets/DemoGIF.gif"
+    alt="Demo BankApp"
+    width="210"
+  />
+</p>
 
 *(video en `shared/assets/DemoBankApp.mp4` — recorrido completo: login, navegacion entre
 las 4 pantallas, transferencia con validaciones, y expiracion de sesion)*
