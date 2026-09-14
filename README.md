@@ -1,97 +1,127 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+<p align="center">
+  <img src="https://i.imgur.com/placeholder-logo.png" alt="BankApp" width="220" />
+</p>
 
-# Getting Started
+<h1 align="center">BankApp</h1>
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+<p align="center">
+  Prueba tecnica Especialista React Native - Daviplata (Banco Davivienda)
+</p>
 
-## Step 1: Start Metro
+---
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## Que es esto
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+Un contenedor Android para cuatro bundles independientes de React Native: Login, Home,
+Transferencia y Movimientos. Cada bundle vive por separado y se comunica con el
+contenedor nativo a traves de un bridge de eventos, simulando el flujo real de una app
+bancaria construida con arquitectura hibrida.
 
-```sh
-# Using npm
+## Demo
+
+*(video en `shared/assets/DemoBankApp.mp4` — recorrido completo: login, navegacion entre
+las 4 pantallas, transferencia con validaciones, y expiracion de sesion)*
+
+## Entregado
+
+- Los cuatro bundles RN estan completos y funcionales con datos de desarrollo locales, hooks, servicios, validaciones y eventos del bridge.
+- `shared/theme` centraliza el design system y los contratos `Session`, `User`, `Movement` y transferencia.
+- El contenedor Kotlin incluye un esqueleto minimo de `MainActivity`, `SessionBridge`, `SessionManager` y registro del paquete nativo.
+- La arquitectura y las decisiones de seguridad estan documentadas en [docs/arquitectura.md](docs/arquitectura.md).
+
+## Alcance no alcanzado
+
+- Kotlin es una prueba de concepto, no una implementacion de produccion: la seleccion dinamica de raices, navegacion nativa y persistencia segura no estan terminadas.
+- Keystore, `EncryptedSharedPreferences`, ProGuard/R8 endurecido y deteccion de root/emulador estan documentados, pero no implementados.
+- Los datos de servicios son datos de desarrollo locales y no representan una API bancaria real.
+
+## Transparencia tecnica
+
+El stack real de la desarrolladora es 100% React Native. No tenia experiencia previa en desarrollo Android nativo con Kotlin, y la oferta original tampoco mencionaba Kotlin como requisito. Por eso se priorizaron cuatro flujos RN solidos y se dejo el codigo nativo como esqueleto honesto y documentado.
+
+## Ejecutar
+
+```bash
+npm install
 npm start
-
-# OR using Yarn
-yarn start
-```
-
-## Step 2: Build and run your app
-
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
-
-### Android
-
-```sh
-# Using npm
 npm run android
-
-# OR using Yarn
-yarn android
 ```
 
-### iOS
+Credenciales de desarrollo del Login: usuario `maria`, contrasena `123456`.
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+## Preview de desarrollo
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+`PreviewApp.tsx` es una herramienta SOLO para desarrollo y QA visual local. Simula el bridge nativo suscribiéndose a los eventos emitidos por los bundles y navega automáticamente entre las cuatro pantallas, sin depender del bridge nativo Kotlin; no forma parte de la arquitectura de producción ni reemplaza la independencia de los bundles.
 
-```sh
-bundle install
+Para activarlo temporalmente, modifica el registro del componente en `index.js`:
+
+```js
+import PreviewApp from './PreviewApp';
+
+AppRegistry.registerComponent(appName, () => PreviewApp);
 ```
 
-Then, and every time you update your native dependencies, run:
+Mantén el resto del archivo igual, inicia Metro y ejecuta la app para revisar el flujo Login -> Home -> Transferir/Movimientos -> Home -> Logout -> Login. La barra `Preview QA` muestra la pantalla actual y confirma que la navegación está simulada. Al terminar, revierte temporalmente ese registro para recuperar el arranque real en `App`/`LoginBundle`:
 
-```sh
-bundle exec pod install
+```js
+import App from './App';
+
+AppRegistry.registerComponent(appName, () => App);
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+En producción, la navegación entre bundles la resuelve el contenedor Android mediante el bridge Kotlin, no `PreviewApp`.
 
-```sh
-# Using npm
-npm run ios
+## Nota sobre el evento LOAD_HOME
 
-# OR using Yarn
-yarn ios
-```
+El documento de la prueba técnica describe que Android debe enviarle los datos del
+usuario al bundle de Home mediante el evento `LOAD_HOME` (props iniciales desde el
+contenedor nativo). En esta entrega, Home carga sus propios datos a través de un
+servicio local (`homeService.ts`) en lugar de recibirlos de Android.
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+Esta es una decisión consciente, no un descuido: como se explica en el resto de este
+README, mi experiencia real es 100% React Native, sin desarrollo Android nativo previo.
+Prioricé invertir el tiempo disponible en construir los 4 bundles de React Native de
+forma completa y sólida —que es donde puedo aportar valor real hoy— en lugar de
+completar la capa de comunicación bidireccional completa en Kotlin, que quedó como
+prueba de concepto documentada.
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+En una implementación de producción, este mismo Home estaría preparado para recibir
+esos datos como props iniciales desde Android en vez de pedirlos él mismo; el cambio
+sería mínimo del lado de React Native (recibir props en lugar de llamar al servicio),
+pero requiere que el contenedor Kotlin persista y enrute la sesión primero, que es la
+pieza que quedó pendiente.
 
-## Step 3: Modify your app
+## Pendiente de implementación en Kotlin
 
-Now that you have successfully run the app, let's make changes!
+Dado el alcance de tiempo y que mi experiencia real es 100% React Native, los siguientes
+puntos del documento quedaron mapeados y documentados, pero no implementados:
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+- Splash nativo antes de cargar el primer bundle.
+- Validación de sesión activa al iniciar la app (siempre arranca en Login).
+- Navegación nativa dinámica entre bundles (simulada en desarrollo vía `PreviewApp.tsx`).
+- Almacenamiento cifrado de sesión (Android Keystore + EncryptedSharedPreferences).
+- Cifrado de payloads del bridge (sesión, usuario, transferencia).
+- Bloqueo de navegación a bundles privados sin sesión válida.
+- Protección contra root/emulador.
+- Configuración reforzada de ProGuard/R8.
+- Manejo de errores robusto del lado Kotlin (más allá de logging).
+- Pruebas nativas específicas (cifrado/descifrado, expiración real de sesión, logout seguro).
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+Estos puntos están descritos a nivel de diseño en la sección de seguridad de este
+documento.
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+Esto no significa desconocimiento de los patrones involucrados, sino de la capa nativa
+especifica. En experiencia previa (apps RN en produccion para Samsung, con +10.000
+descargas activas en LATAM), el patron habitual era: la API respondia con un token de
+autenticacion que ya traia resuelta la logica de redireccion, y ese estado se manejaba
+en variables/estado global (Redux) persistido con AsyncStorage entre sesiones. Un caso
+similar se resolvio para preferencia de idioma: se guardaba localmente antes del Splash,
+era editable dentro de la app, pero si el usuario iniciaba sesion con una preferencia
+distinta guardada en el backend, esa tomaba prioridad sobre la local.
 
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+La logica de bridge/sesion de este proyecto sigue el mismo principio de fondo —estado
+centralizado que decide que pantalla mostrar segun la sesion activa—, simulado en
+`PreviewApp.tsx` ante la ausencia de una capa nativa Android completa y un backend real.
+En produccion, esa misma decision (que bundle cargar, si hay sesion valida) la tomaria
+el contenedor Kotlin, tal como antes la resolvia el backend junto con Redux/AsyncStorage
+del lado de React Native.
