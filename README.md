@@ -37,7 +37,7 @@ las 4 pantallas, transferencia con validaciones, y expiracion de sesion)*
 - El contenedor Kotlin incluye un esqueleto minimo de `MainActivity`, `SessionBridge`, `SessionManager` y registro del paquete nativo.
 - La arquitectura y las decisiones de seguridad estan documentadas en [docs/arquitectura.md](docs/arquitectura.md).
 
-## Alcance no alcanzado
+## Decisiones de alcance
 
 - Kotlin es una prueba de concepto, no una implementacion de produccion: la seleccion dinamica de raices, navegacion nativa y persistencia segura no estan terminadas.
 - Keystore, `EncryptedSharedPreferences`, ProGuard/R8 endurecido y deteccion de root/emulador estan documentados, pero no implementados.
