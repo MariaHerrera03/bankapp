@@ -5,7 +5,7 @@
 <h1 align="center">BankApp</h1>
 
 <p align="center">
-  Prueba tecnica Especialista React Native - Daviplata (Banco Davivienda)
+  Prueba tecnica Especialista React Native
 </p>
 
 ---
