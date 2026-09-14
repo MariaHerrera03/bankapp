@@ -17,7 +17,7 @@ import { colors, radius, spacing, typography } from './shared/theme/theme';
 type PreviewScreen = 'login' | 'home' | 'transfer' | 'movements';
 
 // Para probar rápido puedo bajar esto (ej: 15000 = 15 segundos), pero debe quedar en 3 min para la entrega.
-const SESSION_DURATION_MS = 1 * 60 * 1000;
+const SESSION_DURATION_MS = 3 * 60 * 1000;
 
 function formatRemainingTime(milliseconds: number) {
   const totalSeconds = Math.max(0, Math.ceil(milliseconds / 1000));
