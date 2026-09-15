@@ -69,7 +69,7 @@ npm run android
 
 ### Preview de desarrollo
 
-`PreviewApp.tsx` permite validar localmente el flujo completo sin depender de la capa nativa en Kotlin. simula la comunicación con el bridge nativo y la navegación entre los cuatro bundles.
+`PreviewApp.tsx` permite validar localmente el flujo completo sin depender de la capa nativa en Kotlin. Simula la comunicación con el bridge nativo y la navegación entre los cuatro bundles.
 
 Es el componente utilizado por defecto al ejecutar la aplicación, ya que la capa nativa todavía no implementa la navegación dinámica entre bundles.
 
