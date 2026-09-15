@@ -56,7 +56,7 @@ export function TransferScreen() {
       <View style={styles.container}>
         <View style={styles.header}>
           <Pressable
-            onPress={() => emitBridgeEvent({ type: 'OPEN_HOME' } as any)}
+            onPress={() => emitBridgeEvent({ type: 'OPEN_HOME' })}
           >
             <Text style={styles.back}>‹</Text>
           </Pressable>

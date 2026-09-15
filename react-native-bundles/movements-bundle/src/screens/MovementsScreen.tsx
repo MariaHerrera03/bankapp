@@ -49,7 +49,7 @@ export function MovementsScreen() {
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}>
         <Pressable
-          onPress={() => emitBridgeEvent({ type: 'OPEN_HOME' } as any)}
+            onPress={() => emitBridgeEvent({ type: 'OPEN_HOME' })}
         >
           <Text style={styles.back}>‹</Text>
         </Pressable>

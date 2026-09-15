@@ -40,6 +40,7 @@ export type BridgeEvent =
   | { type: 'LOAD_HOME'; payload: User }
   | { type: 'OPEN_TRANSFER' }
   | { type: 'OPEN_MOVEMENTS' }
+  | { type: 'OPEN_HOME' }
   | { type: 'TRANSFER_SUCCESS'; payload: TransferResult }
   | { type: 'LOGOUT' }
   | { type: 'SESSION_EXPIRED' };
