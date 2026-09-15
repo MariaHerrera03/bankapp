@@ -12,9 +12,9 @@
 
 ## ¿Qué es?
 
-Contenedor Android para cuatro bundles independientes de React Native: Login, Home, Transferencia y Movimientos.
+Aplicación con una capa nativa en Android que integra cuatro bundles independientes de React Native: Login, Home, Transferencia y Movimientos.
 
-Cada bundle funciona de forma independiente y se comunica con el contenedor nativo mediante un bridge de eventos, simulando una arquitectura híbrida para una aplicación bancaria.
+Cada bundle está organizado de forma independiente y se comunica con la capa nativa mediante un bridge de eventos, simulando una arquitectura híbrida para una aplicación bancaria.
 
 ## Demo
 
@@ -33,8 +33,8 @@ El video completo se encuentra en `shared/assets/DemoBankApp.mp4` e incluye el f
 * Cuatro bundles de React Native funcionales: Login, Home, Transferencia y Movimientos.
 * Datos de desarrollo locales, hooks, servicios, validaciones y eventos del bridge.
 * `shared/theme` como punto central para el design system y los contratos de datos (`Session`, `User`, `Movement` y transferencia).
-* Contenedor Android en Kotlin con `MainActivity`, `SessionBridge`, `SessionManager` y registro del paquete nativo.
-* `PreviewApp.tsx` para simular localmente la comunicación con el contenedor y validar el flujo completo.
+* Capa nativa en Kotlin con `MainActivity`, `SessionBridge`, `SessionManager` y registro del paquete nativo.
+* `PreviewApp.tsx` para simular localmente la comunicación con la capa nativa y validar el flujo completo.
 * Documentación de arquitectura y decisiones técnicas en [`docs/arquitectura.md`](docs/arquitectura.md).
 
 ## Alcance
@@ -45,7 +45,7 @@ Quedaron documentados, pero no implementados funcionalmente:
 
 * Navegación nativa dinámica entre bundles.
 * Persistencia segura mediante Android Keystore y `EncryptedSharedPreferences`.
-* Validación y expiración de sesión desde el contenedor nativo.
+* Validación y expiración de sesión desde la capa nativa.
 * Cifrado de payloads del bridge.
 * Bloqueo de acceso a bundles privados sin sesión válida.
 * Protección contra root/emulador.
@@ -69,16 +69,16 @@ npm run android
 
 ### Preview de desarrollo
 
-`PreviewApp.tsx` permite validar localmente el flujo completo sin depender del contenedor Kotlin. Simula el bridge nativo y la navegación entre los cuatro bundles.
+`PreviewApp.tsx` permite validar localmente el flujo completo sin depender de la capa nativa en Kotlin. simula la comunicación con el bridge nativo y la navegación entre los cuatro bundles.
 
-Es el componente utilizado por defecto al ejecutar la aplicación, ya que el contenedor Android todavía no implementa la navegación dinámica entre bundles.
+Es el componente utilizado por defecto al ejecutar la aplicación, ya que la capa nativa todavía no implementa la navegación dinámica entre bundles.
 
 `PreviewApp.tsx` es exclusivamente una herramienta de desarrollo y QA visual y no forma parte de la arquitectura de producción.
 
 ## Nota sobre `LOAD_HOME`
 
-La prueba técnica indica que Android debe enviar los datos del usuario al bundle de Home mediante el evento `LOAD_HOME`.
+La prueba técnica indica que la capa nativa debe enviar los datos del usuario al bundle de Home mediante el evento `LOAD_HOME`.
 
-En esta implementación, Home obtiene sus datos mediante un servicio local (`homeService.ts`) en lugar de recibirlos directamente desde Android.
+En esta implementación, Home obtiene sus datos mediante un servicio local (`homeService.ts`) en lugar de recibirlos directamente desde la capa nativa.
 
-Esta decisión se tomó debido al alcance de la prueba y a que la capa nativa Kotlin quedó como prueba de concepto. En una implementación completa, Home recibiría estos datos como props iniciales desde el contenedor Android y la sesión sería gestionada por este antes de cargar los bundles privados.
+Esta decisión se tomó debido al alcance de la prueba y a que la capa nativa Kotlin quedó como prueba de concepto. En una implementación completa, Home recibiría estos datos como props iniciales desde la capa nativa, que gestionaría la sesión antes de cargar los bundles privados.
